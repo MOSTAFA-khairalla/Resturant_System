@@ -1,0 +1,2 @@
+E:\prodinner\WebUI\obj\Debug\WebUI.csprojAssemblyReference.cache
+E:\prodinner\WebUI\obj\Debug\WebUI.csproj.CoreCompileInputs.cache

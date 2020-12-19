@@ -1,0 +1,2 @@
+E:\prodinner\Tests\obj\Debug\Tests.csprojAssemblyReference.cache
+E:\prodinner\Tests\obj\Debug\Tests.csproj.CoreCompileInputs.cache

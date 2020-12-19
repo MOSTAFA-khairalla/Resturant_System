@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="prodinnerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="chefs">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="firstname" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="lastname" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="countryid" Type="int" />
+    <Property Name="isdeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="countries">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="isdeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'prodinner.dbo.dinnermeals' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="dinnermeals">
+          <Property Name="dinnerid" Type="int" />
+          <Property Name="mealid" Type="int" />
+        </EntityType>-->
+  <EntityType Name="dinners">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="countryid" Type="int" Nullable="false" />
+    <Property Name="chefid" Type="int" Nullable="false" />
+    <Property Name="address" Type="nvarchar" MaxLength="50" />
+    <Property Name="start" Type="datetime" />
+    <Property Name="end" Type="datetime" />
+    <Property Name="isdeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="feedbacks">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="comments" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="meals">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="comments" Type="nvarchar(max)" />
+    <Property Name="picture" Type="nvarchar" MaxLength="40" />
+    <Property Name="isdeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="roles">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'prodinner.dbo.userroles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="userroles">
+    <Key>
+      <PropertyRef Name="userid" />
+      <PropertyRef Name="roleid" />
+    </Key>
+    <Property Name="userid" Type="int" Nullable="false" />
+    <Property Name="roleid" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="login" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="40" Nullable="false" />
+    <Property Name="isdeleted" Type="bit" Nullable="false" />
+  </EntityType>
+  <Association Name="FK__chefs__countryid__182C9B23">
+    <End Role="countries" Type="Self.countries" Multiplicity="0..1" />
+    <End Role="chefs" Type="Self.chefs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="countries">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="chefs">
+        <PropertyRef Name="countryid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <!--Errors Found During Generation:
+error 6004: The table 'prodinner.dbo.dinnermeals' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__dinnermea__dinne__20C1E124" />-->
+  <!--Errors Found During Generation:
+error 6004: The table 'prodinner.dbo.dinnermeals' is referenced by a relationship, but cannot be found.
+        <Association Name="FK__dinnermea__meali__21B6055D" />-->
+  <Association Name="FK__dinners__chefid__1CF15040">
+    <End Role="chefs" Type="Self.chefs" Multiplicity="1" />
+    <End Role="dinners" Type="Self.dinners" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chefs">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dinners">
+        <PropertyRef Name="chefid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__dinners__country__1BFD2C07">
+    <End Role="countries" Type="Self.countries" Multiplicity="1" />
+    <End Role="dinners" Type="Self.dinners" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="countries">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dinners">
+        <PropertyRef Name="countryid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__userroles__rolei__2B3F6F97">
+    <End Role="roles" Type="Self.roles" Multiplicity="1" />
+    <End Role="userroles" Type="Self.userroles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="roles">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="userroles">
+        <PropertyRef Name="roleid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__userroles__useri__2A4B4B5E">
+    <End Role="users" Type="Self.users" Multiplicity="1" />
+    <End Role="userroles" Type="Self.userroles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="userroles">
+        <PropertyRef Name="userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="prodinnerModelStoreContainer">
+    <EntitySet Name="chefs" EntityType="Self.chefs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="countries" EntityType="Self.countries" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="dinners" EntityType="Self.dinners" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="feedbacks" EntityType="Self.feedbacks" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="meals" EntityType="Self.meals" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="userroles" EntityType="Self.userroles" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [userroles].[userid] AS [userid], 
+    [userroles].[roleid] AS [roleid]
+    FROM [dbo].[userroles] AS [userroles]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__chefs__countryid__182C9B23" Association="Self.FK__chefs__countryid__182C9B23">
+      <End Role="countries" EntitySet="countries" />
+      <End Role="chefs" EntitySet="chefs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__dinners__chefid__1CF15040" Association="Self.FK__dinners__chefid__1CF15040">
+      <End Role="chefs" EntitySet="chefs" />
+      <End Role="dinners" EntitySet="dinners" />
+    </AssociationSet>
+    <AssociationSet Name="FK__dinners__country__1BFD2C07" Association="Self.FK__dinners__country__1BFD2C07">
+      <End Role="countries" EntitySet="countries" />
+      <End Role="dinners" EntitySet="dinners" />
+    </AssociationSet>
+    <AssociationSet Name="FK__userroles__rolei__2B3F6F97" Association="Self.FK__userroles__rolei__2B3F6F97">
+      <End Role="roles" EntitySet="roles" />
+      <End Role="userroles" EntitySet="userroles" />
+    </AssociationSet>
+    <AssociationSet Name="FK__userroles__useri__2A4B4B5E" Association="Self.FK__userroles__useri__2A4B4B5E">
+      <End Role="users" EntitySet="users" />
+      <End Role="userroles" EntitySet="userroles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

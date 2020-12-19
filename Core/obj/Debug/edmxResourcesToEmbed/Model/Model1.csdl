@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="prodinnerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="chef">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="firstname" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="lastname" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="countryid" Type="Int32" />
+    <Property Name="isdeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="country" Relationship="Self.FK__chefs__countryid__182C9B23" FromRole="chefs" ToRole="countries" />
+    <NavigationProperty Name="dinners" Relationship="Self.FK__dinners__chefid__1CF15040" FromRole="chefs" ToRole="dinners" />
+  </EntityType>
+  <EntityType Name="country">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="isdeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="chefs" Relationship="Self.FK__chefs__countryid__182C9B23" FromRole="countries" ToRole="chefs" />
+    <NavigationProperty Name="dinners" Relationship="Self.FK__dinners__country__1BFD2C07" FromRole="countries" ToRole="dinners" />
+  </EntityType>
+  <EntityType Name="dinner">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="countryid" Type="Int32" Nullable="false" />
+    <Property Name="chefid" Type="Int32" Nullable="false" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="start" Type="DateTime" Precision="3" />
+    <Property Name="end" Type="DateTime" Precision="3" />
+    <Property Name="isdeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="chef" Relationship="Self.FK__dinners__chefid__1CF15040" FromRole="dinners" ToRole="chefs" />
+    <NavigationProperty Name="country" Relationship="Self.FK__dinners__country__1BFD2C07" FromRole="dinners" ToRole="countries" />
+  </EntityType>
+  <EntityType Name="feedback">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="meal">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="picture" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="isdeleted" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="users" Relationship="Self.userroles" FromRole="roles" ToRole="users" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="login" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="password" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="isdeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="roles" Relationship="Self.userroles" FromRole="users" ToRole="roles" />
+  </EntityType>
+  <Association Name="FK__chefs__countryid__182C9B23">
+    <End Role="countries" Type="Self.country" Multiplicity="0..1" />
+    <End Role="chefs" Type="Self.chef" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="countries">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="chefs">
+        <PropertyRef Name="countryid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__dinners__chefid__1CF15040">
+    <End Role="chefs" Type="Self.chef" Multiplicity="1" />
+    <End Role="dinners" Type="Self.dinner" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chefs">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dinners">
+        <PropertyRef Name="chefid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__dinners__country__1BFD2C07">
+    <End Role="countries" Type="Self.country" Multiplicity="1" />
+    <End Role="dinners" Type="Self.dinner" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="countries">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dinners">
+        <PropertyRef Name="countryid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="userroles">
+    <End Role="roles" Type="Self.role" Multiplicity="*" />
+    <End Role="users" Type="Self.user" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="prodinnerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="chefs" EntityType="Self.chef" />
+    <EntitySet Name="countries" EntityType="Self.country" />
+    <EntitySet Name="dinners" EntityType="Self.dinner" />
+    <EntitySet Name="feedbacks" EntityType="Self.feedback" />
+    <EntitySet Name="meals" EntityType="Self.meal" />
+    <EntitySet Name="roles" EntityType="Self.role" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <AssociationSet Name="FK__chefs__countryid__182C9B23" Association="Self.FK__chefs__countryid__182C9B23">
+      <End Role="countries" EntitySet="countries" />
+      <End Role="chefs" EntitySet="chefs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__dinners__chefid__1CF15040" Association="Self.FK__dinners__chefid__1CF15040">
+      <End Role="chefs" EntitySet="chefs" />
+      <End Role="dinners" EntitySet="dinners" />
+    </AssociationSet>
+    <AssociationSet Name="FK__dinners__country__1BFD2C07" Association="Self.FK__dinners__country__1BFD2C07">
+      <End Role="countries" EntitySet="countries" />
+      <End Role="dinners" EntitySet="dinners" />
+    </AssociationSet>
+    <AssociationSet Name="userroles" Association="Self.userroles">
+      <End Role="roles" EntitySet="roles" />
+      <End Role="users" EntitySet="users" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
